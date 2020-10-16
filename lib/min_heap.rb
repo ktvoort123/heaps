@@ -28,7 +28,12 @@ class MinHeap
   # Time Complexity: ?
   # Space Complexity: ?
   def remove()
-    raise NotImplementedError, "Method not implemented yet..."
+    first_item_node = @store[0]
+    return if @store.length == 1
+    @store[0] = @store[@store.length - 1]
+    @store.pop()
+    heap_down(0)
+    return first_item_node.value
   end
 
 
@@ -67,7 +72,6 @@ class MinHeap
 
   # This helper method takes an index and
   #  moves it up the heap, if it is less than it's parent node.
-  #  It could be **very** helpful for the add method.
   # Time complexity: ?
   # Space complexity: ?
   def heap_up(index)
@@ -91,12 +95,48 @@ class MinHeap
     end
   end
 
+  def left_child(index)
+    left_child_index = (index * 2) + 1
+    return nil if left_child_index > (@store.length - 1)
+    return left_child_index
+  end
+
+  def right_child(index)
+    right_child_index = (index * 2) + 2
+    return nil if right_child_index > (@store.length - 1)
+    return right_child_index
+  end
+
   # This helper method takes an index and 
   #  moves it up the heap if it's smaller
   #  than it's parent node.
   def heap_down(index)
-    raise NotImplementedError, "Method not implemented yet..."
-  end
+ # puts("here for index #{index}")
+    left_child_index = left_child(index)
+    right_child_index = right_child(index)
+    if !left_child_index.nil? && @store[index].key > @store[left_child_index].key
+      # puts("going to do the switch!!!!!!!!!!")
+      new_index = index
+      temp_parent_node = @store[index]
+      @store[new_index] = @store[left_child_index]
+      @store[left_child_index] = temp_parent_node
+      # print(@store)
+      # puts("---------------------------------------------------------")
+      heap_down(new_index)
+    elsif !right_child_index.nil? && @store[index].key > @store[right_child_index].key
+        # puts("going to do the switch!!!!!!!!!!")
+        new_index = index
+        temp_parent_node = @store[index]
+        @store[new_index] = @store[right_child_index]
+        @store[right_child_index] = temp_parent_node
+        # print(@store)
+        # puts("---------------------------------------------------------")
+        heap_down(new_index)
+    else
+      return
+    end
+  
+end
 
   # If you want a swap method... you're welcome
   def swap(index_1, index_2)
