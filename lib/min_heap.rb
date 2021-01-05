@@ -8,6 +8,7 @@ class HeapNode
 end
 
 class MinHeap
+  attr_reader :store
 
   def initialize
     @store = []
@@ -35,7 +36,6 @@ class MinHeap
     heap_down(0)
     return first_item_node.value
   end
-
 
   # Used for Testing
   def to_s
@@ -75,19 +75,15 @@ class MinHeap
   # Time complexity: ?
   # Space complexity: ?
   def heap_up(index)
-    # puts("here for index #{index}")
     if index == 0
       return
     else
       parent_index = what_is_parent_of(index)
       if @store[parent_index].key > @store[index].key
-        # puts("going to do the switch!!!!!!!!!!")
         new_index = parent_index
         temp_parent_node = @store[parent_index]
         @store[new_index] = @store[index]
         @store[index] = temp_parent_node
-        # print(@store)
-        # puts("---------------------------------------------------------")
         heap_up(new_index)
       else
         return
@@ -111,32 +107,18 @@ class MinHeap
   #  moves it up the heap if it's smaller
   #  than it's parent node.
   def heap_down(index)
- # puts("here for index #{index}")
     left_child_index = left_child(index)
     right_child_index = right_child(index)
     if !left_child_index.nil? && @store[index].key > @store[left_child_index].key
-      # puts("going to do the switch!!!!!!!!!!")
-      new_index = index
-      temp_parent_node = @store[index]
-      @store[new_index] = @store[left_child_index]
-      @store[left_child_index] = temp_parent_node
-      # print(@store)
-      # puts("---------------------------------------------------------")
-      heap_down(new_index)
+      swap(index,left_child_index)
+      heap_down(index)
     elsif !right_child_index.nil? && @store[index].key > @store[right_child_index].key
-        # puts("going to do the switch!!!!!!!!!!")
-        new_index = index
-        temp_parent_node = @store[index]
-        @store[new_index] = @store[right_child_index]
-        @store[right_child_index] = temp_parent_node
-        # print(@store)
-        # puts("---------------------------------------------------------")
-        heap_down(new_index)
+        swap(index,right_child_index)
+        heap_down(index)
     else
       return
     end
-  
-end
+  end
 
   # If you want a swap method... you're welcome
   def swap(index_1, index_2)
